@@ -166,8 +166,8 @@ public abstract class IntegerStack implements Iterable<Integer>{
         IntegerStack generic = create(Type.GENERIC);
         IntegerStack primitive = create(Type.PRIMITIVE);
         
-        //test(generic);
-        test(primitive);
+        test(generic);
+        //test(primitive);
     }   
 
     private static void test(IntegerStack stack){
@@ -175,11 +175,16 @@ public abstract class IntegerStack implements Iterable<Integer>{
         System.out.println(stack);
         stack.push(2);
         System.out.println(stack);
+        stack.push(3);
+        System.out.println(stack);
+        stack.push(4);
+        System.out.println(stack);
+        stack.push(5);
+        System.out.println(stack);
+        stack.push(6);
+        System.out.println(stack);
 
-        // Primitive: Iterator test
-        //Iterator<Integer> itr = stack.iterator();
-        //System.out.println(itr.next());
-        //System.out.println(itr.next());
+
 
         try {
             System.out.printf("POP -> %d%n", stack.pop());
@@ -187,6 +192,7 @@ public abstract class IntegerStack implements Iterable<Integer>{
         } catch (NoSuchElementException e){
             System.out.printf("POP -> %s%n", e);
         }
+        
         System.out.println(stack);
 
 
@@ -228,13 +234,11 @@ class IntegerStackGeneric extends IntegerStack {
     }
 
     public String toString() {
-        String output = "";
-        output += "[";
-        for (int n : stack) {
-            output += n + ",";
+        StringBuilder s = new StringBuilder();
+        for (Integer i : stack) {
+            s.append(i + " ");
         }
-        output += "]";
-        return output;
+        return s.toString();
     }
 
     public Iterator<Integer> iterator(){
@@ -292,13 +296,11 @@ class IntegerStackPrimitive extends IntegerStack {
     }
 
     public String toString() {
-        String output = "";
-        output += "[";
+        StringBuilder s = new StringBuilder();
         for (int n : stack) {
-            output += n + ",";
+            s.append(n + " ");
         }
-        output += "]";
-        return output;
+        return s.toString();
     }
 
     public Iterator<Integer> iterator(){
@@ -307,9 +309,15 @@ class IntegerStackPrimitive extends IntegerStack {
 
     private class Itr implements Iterator<Integer> {
         private int i = N;
+        private int currentIndex;
+
         private Itr(){}
-        public boolean hasNext(){return i > 0;}
-        public Integer next(){return stack[--i];}
+        public boolean hasNext(){return currentIndex++ < i; }
+        public Integer next() throws NoSuchElementException {
+            if (i == 0)
+                throw new NoSuchElementException();
+            return stack[--i];
+        }
         public void remove(){throw new UnsupportedOperationException("remove");}
     }
 }
